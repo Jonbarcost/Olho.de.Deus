@@ -1,58 +1,37 @@
-# Olho.de.Deus AI Orchestrator
+# Olho de Deus — fontes públicas reais
 
-Este repositório está preparado para integrar OpenAI GPT e Anthropic Claude em um ambiente automatizado de colaboração.
+Painel local Brasil → UF, com início no Rio de Janeiro. Sem chaves de API.
+Não carrega dados simulados, não gera eventos e não lê o antigo data/demo.json.
 
-## Estrutura
+## Ativação no Windows
 
-- `src/server.js` — servidor Express
-- `src/services/aiOrchestrator.js` — orquestrador de IA
-- `.env.example` — variáveis de ambiente
-- `README.md` — documentação
+Com Node.js 22+ instalado, abra `INICIAR.bat`. Ele instala as dependências, compila
+a interface e inicia em http://localhost:3000. Mantenha a janela aberta. Se o
+navegador abrir antes do servidor, atualize a página.
 
-## Requisitos
+Ou execute `npm ci`, `npm run build`, `npm start`. `npm test` roda testes isolados.
 
-- Node.js 18+
-- npm
-- Chaves da OpenAI e Anthropic
+## Integração efetiva
 
-## Instalação
+O servidor consulta https://cor.rio/feed/ e exibe títulos, datas originais e links
+das publicações oficiais. Não importa o texto integral. Atualizações no máximo
+uma vez a cada cinco minutos; chamadas simultâneas compartilham a mesma consulta.
+Timeout de 15 segundos; limite de 2 MB; origem fixa, sem URLs fornecidas por usuários.
 
-```bash
-npm install
-cp .env.example .env
-```
+O painel distingue conexão verificada, indisponibilidade e conteúdo anterior após
+falha. Não preenche lacunas com exemplos. Datas exibidas no fuso de Brasília.
+O feed é um boletim de publicações, **não uma API de ocorrências em tempo real**.
+Não são atribuídas coordenadas ou locais precisos quando a fonte não os informa.
+Cache em memória; não é arquivo histórico permanente. Reiniciar limpa o cache.
 
-Edite o arquivo `.env` com suas chaves.
+## Câmeras e cobertura
 
-## Executar
+27 UFs cadastradas para navegação. Apenas RJ possui feed integrado nesta versão.
+As outras UFs mostram levantamento pendente. COR.Rio câmeras, radar e DATA.RIO
+estão catalogados como links oficiais: não são transmissões ou bases integradas.
+**Nenhuma câmera individual foi validada para reprodução no painel.** Não há
+quantidades presumidas ou marcadores inventados. Não há monitoramento privado,
+reconhecimento facial ou agentes de IA nesta entrega.
 
-```bash
-npm start
-```
-
-## Endpoint de teste
-
-```bash
-curl -X POST http://localhost:3000/api/ai/orchestrate \
-  -H "Content-Type: application/json" \
-  -d '{"prompt":"Explique o que é um orquestrador de IA e como GPT e Claude podem se complementar."}'
-```
-
-## Como funciona
-
-1. GPT gera uma resposta inicial.
-2. Claude revisa e melhora a resposta.
-3. O orquestrador compara as saídas e escolhe a melhor versão.
-4. A API retorna `draft`, `review` e `final`.
-
-## Variáveis de ambiente
-
-- `OPENAI_API_KEY`
-- `ANTHROPIC_API_KEY`
-- `PORT` (opcional, padrão 3000)
-
-## Observações
-
-- Nunca commite sua `.env` real.
-- Configure `timeout` e `retry` para produção.
-- Use logs de custo e latência em ambiente de produção.
+Servidor local em 127.0.0.1, sem autenticação multiusuário; não publicar na internet.
+Código legado de IA permanece desconectado da execução. Não é necessário criar .env.

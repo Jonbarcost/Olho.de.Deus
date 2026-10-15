@@ -1,36 +1,11 @@
-require("dotenv").config();
-
-const express = require("express");
-const { orchestratePrompt } = require("./services/aiOrchestrator");
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(express.json());
-
-app.get("/health", (_req, res) => {
-  res.json({ ok: true, service: "ai-orchestrator" });
-});
-
-app.post("/api/ai/orchestrate", async (req, res) => {
-  const { prompt } = req.body;
-
-  if (!prompt || !String(prompt).trim()) {
-    return res.status(400).json({ error: "O campo 'prompt' é obrigatório." });
-  }
-
-  try {
-    const result = await orchestratePrompt(prompt);
-    return res.json(result);
-  } catch (error) {
-    console.error("Erro ao orquestrar IA:", error);
-    return res.status(500).json({
-      error: "Falha ao processar o prompt.",
-      details: error.message,
-    });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`AI orchestrator running on http://localhost:${PORT}`);
-});
+const express=require('express');const path=require('node:path');const {createLiveService}=require('./live');
+function createApp(service=createLiveService()){
+ const app=express();app.disable('x-powered-by');
+ app.use((req,res,next)=>{if(!/^(127\.0\.0\.1|localhost)(:\d+)?$/.test(req.headers.host||''))return res.status(403).json({error:'Acesso somente pelo computador local.'});res.set('X-Content-Type-Options','nosniff');res.set('Referrer-Policy','strict-origin-when-cross-origin');next();});
+ app.get('/api/public',async(_req,res)=>{try{res.set('Cache-Control','no-store');res.json(await service.refresh());}catch{res.status(503).json({error:'Falha ao consultar fontes.'});}});
+ app.get('/health',(_req,res)=>res.json({ok:true,mode:'public-sources',connection:service.snapshot().connection.status}));
+ app.use('/api',(_req,res)=>res.status(404).json({error:'Endpoint indisponível.'}));
+ app.use(express.static(path.join(__dirname,'../dist')));return app;
+}
+if(require.main===module){const port=Number(process.env.PORT||3000);createApp().listen(port,'127.0.0.1',()=>console.log(`Olho de Deus: http://localhost:${port} — fontes públicas reais. Sem chaves de API.`));}
+module.exports={createApp};
