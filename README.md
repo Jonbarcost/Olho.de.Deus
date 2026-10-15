@@ -1,45 +1,37 @@
-# Olho de Deus — demonstração local
+# Olho de Deus — fontes públicas reais
 
-Painel funcional com mapa, fontes fictícias, geração de ocorrências, filtros,
-histórico e revisão. **Não exige chaves de API nem assinatura adicional.**
+Painel local Brasil → UF, com início no Rio de Janeiro. Sem chaves de API.
+Não carrega dados simulados, não gera eventos e não lê o antigo data/demo.json.
 
-## Windows: abrir com dois cliques
+## Ativação no Windows
 
-1. Instale Node.js 22 ou superior (Jon já concluiu esta etapa).
-2. Abra `INICIAR.bat` na pasta do projeto. A primeira execução precisa de internet
-   para instalar as dependências. Mantenha a janela aberta enquanto usa o painel.
-3. Acesse http://localhost:3000. Se o navegador abrir antes do servidor, atualize a página.
+Com Node.js 22+ instalado, abra `INICIAR.bat`. Ele instala as dependências, compila
+a interface e inicia em http://localhost:3000. Mantenha a janela aberta. Se o
+navegador abrir antes do servidor, atualize a página.
 
-Alternativamente: `npm ci`, `npm run build`, `npm start`.
-Teste: `npm test`. Desenvolvimento: execute `npm start` e, em outra janela, `npm run dev`.
+Ou execute `npm ci`, `npm run build`, `npm start`. `npm test` roda testes isolados.
 
-## O que funciona
+## Integração efetiva
 
-- Mapa de São Paulo com marcadores e detalhes de ocorrências fictícias.
-- Busca por título, fonte e bairro; filtros de fonte, estado e data no histórico.
-- Simular um evento, revisar ocorrência e pausar/ativar fontes fictícias.
-- Persistência local em `data/demo.json`; até 500 eventos e 100 registros de atividade.
-- Layout responsivo, navegação por teclado e detalhes em diálogo.
-- Mapa usa tiles externos do OpenStreetMap, com atribuição. Se não carregarem,
-  a lista e os detalhes continuam disponíveis. Não há geocodificação ou busca global de ruas.
+O servidor consulta https://cor.rio/feed/ e exibe títulos, datas originais e links
+das publicações oficiais. Não importa o texto integral. Atualizações no máximo
+uma vez a cada cinco minutos; chamadas simultâneas compartilham a mesma consulta.
+Timeout de 15 segundos; limite de 2 MB; origem fixa, sem URLs fornecidas por usuários.
 
-## Limites explícitos
+O painel distingue conexão verificada, indisponibilidade e conteúdo anterior após
+falha. Não preenche lacunas com exemplos. Datas exibidas no fuso de Brasília.
+O feed é um boletim de publicações, **não uma API de ocorrências em tempo real**.
+Não são atribuídas coordenadas ou locais precisos quando a fonte não os informa.
+Cache em memória; não é arquivo histórico permanente. Reiniciar limpa o cache.
 
-Esta é uma **demonstração de produto**, não o piloto de produção completo descrito
-nas propostas anteriores. Todos os dados são simulados; nenhuma câmera, pessoa
-ou veículo real é monitorado. Não há autenticação multiusuário, autorização de
-fontes reais, PostGIS, auditoria inviolável, retenção legal ou agentes de IA.
-Os nomes de locais são ilustrativos, não indicam câmeras instaladas nesses locais.
+## Câmeras e cobertura
 
-Servidor restrito a `127.0.0.1`, para um usuário local. Não publique na internet.
-O JSON local pode ser alterado por quem tem acesso à pasta e não é uma trilha de
-segurança. Não insira dados reais. Tiles de mapas fazem requisições a terceiros.
+27 UFs cadastradas para navegação. Apenas RJ possui feed integrado nesta versão.
+As outras UFs mostram levantamento pendente. COR.Rio câmeras, radar e DATA.RIO
+estão catalogados como links oficiais: não são transmissões ou bases integradas.
+**Nenhuma câmera individual foi validada para reprodução no painel.** Não há
+quantidades presumidas ou marcadores inventados. Não há monitoramento privado,
+reconhecimento facial ou agentes de IA nesta entrega.
 
-O código legado `src/services/aiOrchestrator.js` está preservado como referência,
-mas não é importado nem exposto pelo servidor. Integração de IA exige etapa própria,
-revisão dos modelos e credenciais. Os aplicativos ChatGPT e Claude não estão conectados.
-
-## Próximas etapas
-
-Autenticação e concessões por fonte; banco geográfico e migrações; auditoria e
-retenção; conectores autorizados; agentes com escopo e evidências verificáveis.
+Servidor local em 127.0.0.1, sem autenticação multiusuário; não publicar na internet.
+Código legado de IA permanece desconectado da execução. Não é necessário criar .env.
