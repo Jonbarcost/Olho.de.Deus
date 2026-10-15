@@ -1,0 +1,16 @@
+{
+  "name": "olho-de-deus-ai-orchestrator",
+  "version": "1.0.0",
+  "description": "Ambiente base para integração de ChatGPT + Claude com orquestração automatizada",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "openai": "^4.52.0"
+  }
+}
