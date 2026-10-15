@@ -1,58 +1,45 @@
-# Olho.de.Deus AI Orchestrator
+# Olho de Deus — demonstração local
 
-Este repositório está preparado para integrar OpenAI GPT e Anthropic Claude em um ambiente automatizado de colaboração.
+Painel funcional com mapa, fontes fictícias, geração de ocorrências, filtros,
+histórico e revisão. **Não exige chaves de API nem assinatura adicional.**
 
-## Estrutura
+## Windows: abrir com dois cliques
 
-- `src/server.js` — servidor Express
-- `src/services/aiOrchestrator.js` — orquestrador de IA
-- `.env.example` — variáveis de ambiente
-- `README.md` — documentação
+1. Instale Node.js 22 ou superior (Jon já concluiu esta etapa).
+2. Abra `INICIAR.bat` na pasta do projeto. A primeira execução precisa de internet
+   para instalar as dependências. Mantenha a janela aberta enquanto usa o painel.
+3. Acesse http://localhost:3000. Se o navegador abrir antes do servidor, atualize a página.
 
-## Requisitos
+Alternativamente: `npm ci`, `npm run build`, `npm start`.
+Teste: `npm test`. Desenvolvimento: execute `npm start` e, em outra janela, `npm run dev`.
 
-- Node.js 18+
-- npm
-- Chaves da OpenAI e Anthropic
+## O que funciona
 
-## Instalação
+- Mapa de São Paulo com marcadores e detalhes de ocorrências fictícias.
+- Busca por título, fonte e bairro; filtros de fonte, estado e data no histórico.
+- Simular um evento, revisar ocorrência e pausar/ativar fontes fictícias.
+- Persistência local em `data/demo.json`; até 500 eventos e 100 registros de atividade.
+- Layout responsivo, navegação por teclado e detalhes em diálogo.
+- Mapa usa tiles externos do OpenStreetMap, com atribuição. Se não carregarem,
+  a lista e os detalhes continuam disponíveis. Não há geocodificação ou busca global de ruas.
 
-```bash
-npm install
-cp .env.example .env
-```
+## Limites explícitos
 
-Edite o arquivo `.env` com suas chaves.
+Esta é uma **demonstração de produto**, não o piloto de produção completo descrito
+nas propostas anteriores. Todos os dados são simulados; nenhuma câmera, pessoa
+ou veículo real é monitorado. Não há autenticação multiusuário, autorização de
+fontes reais, PostGIS, auditoria inviolável, retenção legal ou agentes de IA.
+Os nomes de locais são ilustrativos, não indicam câmeras instaladas nesses locais.
 
-## Executar
+Servidor restrito a `127.0.0.1`, para um usuário local. Não publique na internet.
+O JSON local pode ser alterado por quem tem acesso à pasta e não é uma trilha de
+segurança. Não insira dados reais. Tiles de mapas fazem requisições a terceiros.
 
-```bash
-npm start
-```
+O código legado `src/services/aiOrchestrator.js` está preservado como referência,
+mas não é importado nem exposto pelo servidor. Integração de IA exige etapa própria,
+revisão dos modelos e credenciais. Os aplicativos ChatGPT e Claude não estão conectados.
 
-## Endpoint de teste
+## Próximas etapas
 
-```bash
-curl -X POST http://localhost:3000/api/ai/orchestrate \
-  -H "Content-Type: application/json" \
-  -d '{"prompt":"Explique o que é um orquestrador de IA e como GPT e Claude podem se complementar."}'
-```
-
-## Como funciona
-
-1. GPT gera uma resposta inicial.
-2. Claude revisa e melhora a resposta.
-3. O orquestrador compara as saídas e escolhe a melhor versão.
-4. A API retorna `draft`, `review` e `final`.
-
-## Variáveis de ambiente
-
-- `OPENAI_API_KEY`
-- `ANTHROPIC_API_KEY`
-- `PORT` (opcional, padrão 3000)
-
-## Observações
-
-- Nunca commite sua `.env` real.
-- Configure `timeout` e `retry` para produção.
-- Use logs de custo e latência em ambiente de produção.
+Autenticação e concessões por fonte; banco geográfico e migrações; auditoria e
+retenção; conectores autorizados; agentes com escopo e evidências verificáveis.
